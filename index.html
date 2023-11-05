@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Library Management System</title>
+    <style>
+               body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(143, 122, 95);
+        }
+
+        span>h1 {
+            color: rgb(89, 50, 50);
+            text-shadow: 2px 2px 2px black;
+            text-align: center;
+        }
+
+   
+
+        .app-container {
+            display: flex;
+            flex-direction:column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .book-list, .add-book, .search-book {
+            color: rgb(63, 41, 41);
+            width: 100%;
+            max-width: 500px;
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #000000;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px 2px rgb(134, 131, 131);
+        }
+        .search-book input{
+            border-radius: 15px;
+            padding: 10px;
+            border: none;
+            outline: none;
+        }
+
+        .book-list ul, #searchResults {
+            list-style: none;
+            padding: 0;
+        }
+
+        .add-book form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .add-book form label {
+            color: rgb(17, 15, 15);
+        }
+
+        .add-book form input {
+            border-radius: 15px;
+            padding: 10px;
+            border: none;
+            outline: none;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 10px 12px;
+            width: 150px;
+            border: none;
+            border-radius: 15px;
+            background-color: white;
+            color: black;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: black;
+            color: rgb(53, 39, 39);
+            font-size: 12px;
+        }
+    </style>
+    
+</head>
+<body>
+    <span><h1>Online Library Management System</h1></span>
+ 
+    <div class="app-container">
+        <div class="book-list">
+            <h2>Book List</h2>
+            <ul id="bookList">
+               
+                <li>Adventures of Tom Sawyer</li>
+                <p>Author: Mark Twain</p>
+                <p> ISBN:2233344</p>
+                <hr>
+                <li>Ancient Marine</li>
+                <p>Author: Coleridge</p>
+                <p> ISBN:2233455</p>
+                <hr>
+                <li>Mein Kampf</li>
+                <p>Author:  Adolf Hitler</p>
+                <p> ISBN:2233566</p>
+                <hr>
+                <li>Adventures of Sherlock Holmes</li>
+                <p>Author: Conan Doyle</p>
+                <p> ISBN:2233677</p>
+                <hr>
+                <li>Divine Comedy</li>
+                <p>Author: Dante</p>
+                <p> ISBN:2233788</p>
+            </ul>
+        </div>
+
+        <div class="add-book">
+            <h2>Add New Book</h2>
+            <form id="Book-form" class="book">
+                <label for="title">Title:</label>
+                <input type="text" id="title"  placeholder="Title " required>
+                <label for="Author">Author:</label>
+                <input type="text" id="Author" name="Author" placeholder="Author" required>
+                <label for="ISBN">ISBN:</label>
+                <input type="number" id="ISBN" placeholder="Enter the number" name="ISBN" required>
+                <button type="button" onclick="addNewBook()">Add Book</button>
+            </form>
+        </div>
+
+        <div class="search-book">
+            <h2>Search for Book</h2>
+            <input type="text" id="searchInput" oninput="searchBooks()" placeholder="Search by title">
+            <ul id="searchResults">Search results will be show here</ul>
+        </div>
+    </div>
+
+    <script>
+        let bookObject = [
+            { ttl: "Adventures of Tom Sawyer", aut: "Mark Twain" },
+            { ttl: "Ancient Mariner", aut: "Coleridge" },
+            { ttl: "Mein Kampf", aut: "Adolf Hitle" },
+            { ttl: "Adventures of Sherlock Holmes", aut: "Arthur Conan Doyle" },
+            { ttl: "Divine Comedy", aut: " Dante" }
+        ];
+
+        function addNewBook() {
+            let titleInput = document.getElementById('title').value;
+            let AuthorInput = document.getElementById('Author').value;
+            let ISBNInput = document.getElementById('ISBN').value;
+
+            const duplicate = bookObject.find(book => book.ttl === titleInput);
+            if (duplicate) {
+                alert('Book with this title  already exists!');
+                return;
+            }
+
+            let newBook = {
+                ttl: titleInput,
+                aut: AuthorInput,
+                isbn: ISBNInput
+            };
+            bookObject.push(newBook);
+            showBook();
+            clearFormFields();
+        }
+
+        function showBook() {
+            const bookList = document.getElementById('bookList');
+            bookList.innerHTML = ''; 
+
+            bookObject.forEach(book => {
+                const li = document.createElement('li');
+                const p = document.createElement('p');
+                const hr = document.createElement('hr');
+                li.textContent = 'Title: ' + book.ttl;
+                p.textContent = 'Author: ' + book.aut;
+                bookList.appendChild(li);
+                bookList.appendChild(p);
+                bookList.appendChild(hr);
+            });
+        }
+
+        function searchBooks() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = '';
+
+            const filteredBooks = bookObject.filter(book => book.ttl.toLowerCase().includes(searchTerm));
+
+            filteredBooks.forEach(book => {
+                const li = document.createElement('li');
+                li.textContent = book.ttl;
+                searchResults.appendChild(li);
+            });
+        }
+
+        function clearFormFields() {
+            document.getElementById('title').value = '';
+            document.getElementById('Author').value = '';
+            document.getElementById('ISBN').value = '';
+        }
+
+        showBook(); 
+    </script>
+</body>
+</html>
